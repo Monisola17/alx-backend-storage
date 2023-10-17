@@ -6,6 +6,7 @@
 from pymongo import MongoClient
 
 
+# MongoDB connection details
 mongo_uri = "mongodb://localhost:27017"
 database_name = "logs"
 collection_name = "nginx"
@@ -31,10 +32,10 @@ status_logs = collection.count_documents({"method": "GET", "path": "/status"})
 
 # Display the statistics
 print(f"{total_logs} logs")
-
 print("Methods:")
-for method in http_methods:
-    print(f"\t{method}: {method_counts[method]}")
 
-print(f"{status_logs} logs with method=GET and path=/status")
+for method, count in method_counts.items():
+    print(f"\tmethod {method}: {count}")
+
+print(f"{status_logs} status check")
 
