@@ -2,10 +2,11 @@
 """Redis and Python exercise"""
 import redis
 import uuid
-from typing import Union
+from typing import Union, Callable
 
 
 class Cache:
+
     def __init__(self):
         self._redis = redis.Redis()
         self._redis.flushdb()
@@ -15,3 +16,15 @@ class Cache:
         self._redis.set(key, data)
         return key
 
+    def get(self, key: str, fn: Callable[[bytes], any] = None)/
+          -> Union[str, bytes, int, float, None]:
+        data = self._redis.get(key)
+        if data is not None and fn is not None:
+            return fn(data)
+        return data
+
+    def get_str(self, key: str) -> str:
+        return self.get(key, fn=lambda data: data.decode("utf-8"))
+
+    def get_int(self, key: str) -> int:
+        return self.get(key, fn=int)
